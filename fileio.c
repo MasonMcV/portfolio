@@ -8,48 +8,71 @@
 
 #include "fileio.h"
 
-void readFileIn(MOVIE* movie_ptr){
+void readFileIn(MOVIE* movieList, trieNode* base){
 
     FILE *fp;
     char str[901] = {0};
 
     /* opening file for reading */
-    fp = fopen("../data.tsv", "r");
+    fp = fopen("../otherdata.tsv", "r");
     if (fp == NULL)
     {
         perror("Error opening file");
         return;
     }
+    dafsaNode dafsaBase = {
+            .letter = '\0',
+            .endOfWord = false,
+            .childNumber = 0,
+            .children = NULL
+    };
+
     int i = 0;
-    MOVIE* movieList = (MOVIE*)calloc(sizeof(MOVIE), 5689835);
+    movieList = (MOVIE*)calloc(sizeof(MOVIE), 5689835);
     fgets(str, 900, fp); // read past the first line of headers
     while (fgets(str, 900, fp) != NULL) // read the rest of the lines
     {
-        char* value = strtok(str, "\t\0");
+        char* value = strtok(str, "\t");
         MOVIE *movie = &movieList[i++];
         movie->id = i;
-        strcpy(movie->titleType, value);
 
-        value = strtok(str, "\t\0");
-        strcpy(movie->primaryTitle, value);
+        //strcpy(movie->tconst, value);
 
-        value = strtok(str, "\t\0");
-        strcpy(movie->originalTitle, value);
+        value = strtok(NULL, "\t");
+        //strcpy(movie->titleType, value);
 
-        value = strtok(str, "\t\0");
-        movie->isAdult = strcmp(value, "0") ? false : true;
 
-        value = strtok(str, "\t\0");
-        movie->startYear = (int) strtol(value, NULL, 10);
+        value = strtok(NULL, "\t");
+        //strcpy(movie->primaryTitle, value);
 
-        value = strtok(str, "\t\0");
-        movie->endYear, (strcmp(value, "/N") == 0) ? (int) strtol(value, NULL, 10) : 0;
+        //insertTrieNode(base, value);
+        insertDAFSANode(&dafsaBase, value);
+        //displayDAFSA(&dafsaBase, str, 0);
+        /*for (int i = 0; i < dafsaBase.*//*children[0]->*//*childNumber; i++)
+        {
+            //printf("%d, %c\n", i, dafsaBase.children[0]->children[i]->letter);
+            char str[400] = {0};
+            displayDAFSA(dafsaBase.children[i], str, 0);
 
-        value = strtok(str, "\t\0");
-        movie->runtimeMinutes, (strcmp(value, "/N") == 0) ? (int) strtol(value, NULL, 10) : 0;
+        }*/
+        //printf("\n");
+        //value = strtok(NULL, "\t");
+        //strcpy(movie->originalTitle, value);
 
-        value = strtok(str, "\t\0");
-        strcpy(movie->genres, value);
+        //value = strtok(NULL, "\t");
+        //movie->isAdult = strcmp(value, "0") ? false : true;
+
+        //value = strtok(NULL, "\t");
+        //movie->startYear = (int) strtol(value, NULL, 10);
+
+        //value = strtok(NULL, "\t");
+        //movie->endYear, (strcmp(value, "/N") == 0) ? (int) strtol(value, NULL, 10) : 0;
+
+        //value = strtok(NULL, "\t");
+        //movie->runtimeMinutes, (strcmp(value, "/N") == 0) ? (int) strtol(value, NULL, 10) : 0;
+
+        //value = strtok(NULL, "\t");
+        //strcpy(movie->genres, value);
 
     }
     printf("%d", i);

@@ -6,7 +6,8 @@
 #define PORTFOLIO_FILEIO_H
 
 #include "movie.h"
+#include "trie.h"
 
-void readFileIn(MOVIE*);
+void readFileIn(MOVIE*, trieNode*);
 
 #endif //PORTFOLIO_FILEIO_H
