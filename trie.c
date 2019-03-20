@@ -12,9 +12,9 @@
 
 int printed;
 
-dafsaNode *findPrefix(dafsaNode *base, const char *string, int *depth)
+trieNode *findPrefix(trieNode *base, const char *string, int *depth)
 {
-    dafsaNode *current = base;
+    trieNode *current = base;
     if (current->childNumber == 0)
     {
         return current;
@@ -34,9 +34,9 @@ dafsaNode *findPrefix(dafsaNode *base, const char *string, int *depth)
     return current;
 }
 
-dafsaNode *newdafsaNode(char letter, bool endOfWord)
+trieNode *newTrieNode(char letter, bool endOfWord)
 {
-    dafsaNode *new = malloc(sizeof(dafsaNode));
+    trieNode *new = malloc(sizeof(trieNode));
     new->letter = letter;
     if (endOfWord)
     {
@@ -47,20 +47,20 @@ dafsaNode *newdafsaNode(char letter, bool endOfWord)
     {
         new->endOfWord = false;
         new->childNumber = 1;
-        new->children = malloc(sizeof(dafsaNode *));
+        new->children = malloc(sizeof(trieNode *));
     }
 
     return new;
 }
 
-dafsaNode *addSuffix(char *string)
+trieNode *addSuffix(char *string)
 {
     if (string[0] == '\0')
         return NULL;
     bool isLast = (string[1] == '\0') ? true : false; // False iff string[1] is null (there are no more letters)
     char c = string[0];
 
-    dafsaNode *new = newdafsaNode(c, isLast);
+    trieNode *new = newTrieNode(c, isLast);
     if (!isLast)
     {
         new->children[0] = addSuffix(string + 1);
@@ -68,13 +68,11 @@ dafsaNode *addSuffix(char *string)
     }
 }
 
-void displayDAFSA(dafsaNode *root, char *str, int level, int number)
+void displayTrie(trieNode *root, char *str, int level, int number)
 {
-//    static int printed = 0;
     if (number > 0 && printed >= number)
         return;
     char letter = root->letter;
-    //if (letter == '\n') letter = '?';
     if (root->endOfWord)
     {
         str[level] = letter;
@@ -88,13 +86,13 @@ void displayDAFSA(dafsaNode *root, char *str, int level, int number)
         str[level] = letter;
         if (level == 0)
             str[0] = ' ';
-        displayDAFSA(root->children[i], str, level + 1, number);
+        displayTrie(root->children[i], str, level + 1, number);
     }
 }
 
-dafsaNode *searchDAFSA(dafsaNode *base, const char *string, int *depth)
+trieNode *searchTrie(trieNode *base, const char *string, int *depth)
 {
-    dafsaNode *current = base;
+    trieNode *current = base;
     if (current->childNumber == 0)
     {
         return current;
@@ -114,10 +112,10 @@ dafsaNode *searchDAFSA(dafsaNode *base, const char *string, int *depth)
     return current;
 }
 
-void insertDAFSANode(dafsaNode *base, char *string)
+void insertTrieNode(trieNode *base, char *string)
 {
     int prefixLength = 0;
-    dafsaNode *prefix = findPrefix(base, string, &prefixLength);
+    trieNode *prefix = findPrefix(base, string, &prefixLength);
 
     if (prefixLength == strlen(string))
     {
@@ -127,8 +125,8 @@ void insertDAFSANode(dafsaNode *base, char *string)
 
     prefix->childNumber += 1; // Update number of children
 
-    dafsaNode **newChildren = realloc(prefix->children,
-                                      sizeof(dafsaNode *) * prefix->childNumber); // Allocate space for the new one
+    trieNode **newChildren = realloc(prefix->children,
+                                      sizeof(trieNode *) * prefix->childNumber); // Allocate space for the new one
 
     prefix->children = newChildren;
     prefix->children[prefix->childNumber - 1] = addSuffix(string + prefixLength); // Add the rest of the nodes to it

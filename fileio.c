@@ -8,7 +8,7 @@
 
 #include "fileio.h"
 
-void readFileIn(MOVIE* movieList, dafsaNode* base){
+void readFileIn(MOVIE** movieList, trieNode* base){
 
     FILE *fp;
     char str[901] = {0};
@@ -25,24 +25,35 @@ void readFileIn(MOVIE* movieList, dafsaNode* base){
     //fgets(str, 900, fp); // read past the first line of headers
     while (fgets(str, 900, fp) != NULL) // read the rest of the lines
     {
-        //if(i > 66118)
-        //    break;
+        movieList[i] = calloc(sizeof(MOVIE), 1);
+
+        // fields are in the order
+
+
+        char primaryTitle[100];
+        bool isAdult;
+        int startYear;
+        int runtimeMinutes;
+        char genres[41];
+
+
         char* value = strtok(str, "\t");
+        movieList[i]->primaryTitle = calloc(sizeof(char), strlen(value));
         //MOVIE *movie = &movieList[i++];
 
         value = strtok(NULL, "\t");
 
-
         value = strtok(NULL, "\t");
 
 
-        insertDAFSANode(base, value);
-        //displayDAFSA(&dafsaBase, str, 0);
+        insertTrieNode(base, value);
+
+        //displayTrie(&dafsaBase, str, 0);
         /*for (int i = 0; i < dafsaBase.*//*children[0]->*//*childNumber; i++)
         {
             //printf("%d, %c\n", i, dafsaBase.children[0]->children[i]->letter);
             char str[400] = {0};
-            displayDAFSA(dafsaBase.children[i], str, 0);
+            displayTrie(dafsaBase.children[i], str, 0);
 
         }*/
 

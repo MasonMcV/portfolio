@@ -21,27 +21,27 @@ int printed;
 int main()
 {
     // Get the number of letters / words / lines in the data.tsv file
-    FILE *shell;
+    /*FILE *shell;
     char *command = "wc -l ../moviedata.tsv";
     static int WORD_COUNT = 0;
     shell = popen(command, "r");
     fscanf(shell, "%d", &WORD_COUNT);
     pclose(shell);
-    printf("%d Letters\n\n", WORD_COUNT);
+    printf("%d Letters\n\n", WORD_COUNT);*/
 
-    //MOVIE *movieList = (MOVIE*)calloc(sizeof(MOVIE), WORD_COUNT);
+    MOVIE **movieList = calloc(sizeof(MOVIE*), 1);
 
-    dafsaNode base = {
+    trieNode base = {
             .letter = '\0',
             .endOfWord = false,
             .childNumber = 0,
             .children = NULL
     };
 
-    readFileIn(NULL, &base);
+    readFileIn(movieList, &base);
 
     char str[409];
-    //displayDAFSA(&base, str, 0, -1);
+    //displayTrie(&base, str, 0, -1);
 
 
     //getchar();
@@ -60,9 +60,9 @@ int main()
         userInput[i] = c;*/
         int length = 0;
         printed = 0;
-        dafsaNode* node = searchDAFSA(&base, userInput, &length);
+        trieNode* node = searchTrie(&base, userInput, &length);
 
-        displayDAFSA(node, str, 0, 20);
+        displayTrie(node, str, 0, 20);
         userInput[0] = '\0';
         printf("\n\nEnter Next Search: ");
     }

@@ -9,16 +9,11 @@
 
 typedef struct MOVIE
 {
-    int id;
-    char tconst[10];
-    char titleType[10];
-    char primaryTitle[100];
-    char originalTitle[100];
+    char *primaryTitle;
     bool isAdult;
     int startYear;
-    int endYear;
     int runtimeMinutes;
-    char genres[41];
+    char *genres;
 } MOVIE;
 
 #endif //PORTFOLIO_MOVIE_H

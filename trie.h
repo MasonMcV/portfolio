@@ -7,19 +7,20 @@
 
 #include "mybool.h"
 
-typedef struct dafsaNode
+typedef struct trieNode
 {
     char letter;
     bool endOfWord;
     int childNumber;
-    struct dafsaNode **children;
-} dafsaNode;
+    //MOVIE *data;
+    struct trieNode **children;
+} trieNode;
 
 
-void insertDAFSANode(struct dafsaNode *base, char* string);
+void insertTrieNode(struct trieNode *base, char *string);
 
-void displayDAFSA(dafsaNode *root, char *str, int level, int number);
+void displayTrie(trieNode *root, char *str, int level, int number);
 
-dafsaNode *searchDAFSA(dafsaNode *base, const char *string, int *depth);
+trieNode *searchTrie(trieNode *base, const char *string, int *depth);
 
 #endif //PORTFOLIO_TRIE_H
