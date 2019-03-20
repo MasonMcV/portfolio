@@ -7,8 +7,8 @@
 //
 // Also look at http://www.cs.cmu.edu/afs/cs/academic/class/15451-s06/www/lectures/scrabble.pdf
 
-#include <stdio.h>
-#include <stdbool.h>
+/*#include <stdio.h>
+#include "mybool.h"
 #include <memory.h>
 #include <stdlib.h>
 
@@ -68,7 +68,7 @@ void displayTrie(trieNode *root, char *str, int level)
             displayTrie(root->children[i], str, level + 1);
         }
     }
-}
+}*/
 
 /*int findSubString(node *base, char *string, node *result)
 {
@@ -100,7 +100,7 @@ void displayTrie(trieNode *root, char *str, int level)
 
 
 
-int main()
+/*int main()
 {
     FILE *shell;
     char *command = "wc -c ../data.tsv";
@@ -114,7 +114,7 @@ int main()
     FILE *fp;
     char str[409] = {0};
 
-    /* opening file for reading */
+    *//* opening file for reading *//*
     fp = fopen("../data.tsv", "r");
     if (fp == NULL)
     {
@@ -138,7 +138,7 @@ int main()
     displayTrie(&base, string, 0);
     getchar();
     return (0);
-}
+}*/
 
 
 /*

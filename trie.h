@@ -5,14 +5,7 @@
 #ifndef PORTFOLIO_TRIE_H
 #define PORTFOLIO_TRIE_H
 
-#include <stdbool.h>
-
-typedef struct trieNode
-{
-    char letter;
-    bool endOfWord;
-    struct trieNode *children[49];
-} trieNode;
+#include "mybool.h"
 
 typedef struct dafsaNode
 {
@@ -23,15 +16,10 @@ typedef struct dafsaNode
 } dafsaNode;
 
 
-
-void insertTrieNode(trieNode *base, char *string);
-
-
-void displayTrie(trieNode *root, char *str, int level);
-
 void insertDAFSANode(struct dafsaNode *base, char* string);
 
-void displayDAFSA(dafsaNode *root, char *str, int level);
+void displayDAFSA(dafsaNode *root, char *str, int level, int number);
 
+dafsaNode *searchDAFSA(dafsaNode *base, const char *string, int *depth);
 
 #endif //PORTFOLIO_TRIE_H

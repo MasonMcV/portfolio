@@ -1,14 +1,14 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <memory.h>
 #include <stdlib.h>
 
+#include "mybool.h"
 #include "movie.h"
 #include "fileio.h"
 
 int test(int test1, int *test2)
 {
-    for (int i=0;i<10;i++)
+    for (int i = 0; i < 10; i++)
     {
         *test2 = 6;
         test1 += 50;
@@ -16,37 +16,59 @@ int test(int test1, int *test2)
     *test2 = 34;
     return test1;
 }
+int printed;
 
 int main()
 {
-    int a = 0, b = 1;
-    printf("%d, %d\n", a, b);
-    a = test(a, &b);
-    printf("%d, %d\n", a, b);
-    printf("%d \n\n", (int) sizeof(dafsaNode*));
     // Get the number of letters / words / lines in the data.tsv file
     FILE *shell;
-    char *command = "wc -l ../lessdata.tsv";
-    static int LETTER_COUNT = 0;
+    char *command = "wc -l ../moviedata.tsv";
+    static int WORD_COUNT = 0;
     shell = popen(command, "r");
-    fscanf(shell, "%d", &LETTER_COUNT);
+    fscanf(shell, "%d", &WORD_COUNT);
     pclose(shell);
-    printf("%d Letters\n\n", LETTER_COUNT);
+    printf("%d Letters\n\n", WORD_COUNT);
 
-    MOVIE *movieList = NULL;
+    //MOVIE *movieList = (MOVIE*)calloc(sizeof(MOVIE), WORD_COUNT);
 
-    trieNode base = {
+    dafsaNode base = {
             .letter = '\0',
             .endOfWord = false,
+            .childNumber = 0,
             .children = NULL
     };
 
-    readFileIn(movieList, &base);
+    readFileIn(NULL, &base);
+
+    char str[409];
+    //displayDAFSA(&base, str, 0, -1);
 
 
-    getchar();
-    free(movieList);
-    return (0);
+    //getchar();
+    //free(movieList);
+    char userInput[409] = {0};
+    int i = 0;
+    char c;
+    while (strcmp(userInput, "DONE") !=0)
+    {
+        //scanf("%s", userInput);
+        fgets(userInput, 400, stdin);
+        /*if (c== '<')
+            i--;
+        else
+            i++;
+        userInput[i] = c;*/
+        int length = 0;
+        printed = 0;
+        dafsaNode* node = searchDAFSA(&base, userInput, &length);
+
+        displayDAFSA(node, str, 0, 20);
+        userInput[0] = '\0';
+        printf("\n\nEnter Next Search: ");
+    }
+
+    exit(0);
+    return 0;
 }
 
 

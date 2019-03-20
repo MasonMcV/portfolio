@@ -8,6 +8,6 @@
 #include "movie.h"
 #include "trie.h"
 
-void readFileIn(MOVIE*, trieNode*);
+void readFileIn(MOVIE*, dafsaNode*);
 
 #endif //PORTFOLIO_FILEIO_H

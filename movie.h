@@ -5,7 +5,7 @@
 #ifndef PORTFOLIO_MOVIE_H
 #define PORTFOLIO_MOVIE_H
 
-#include <stdbool.h>
+#include "mybool.h"
 
 typedef struct MOVIE
 {

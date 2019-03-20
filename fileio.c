@@ -8,45 +8,35 @@
 
 #include "fileio.h"
 
-void readFileIn(MOVIE* movieList, trieNode* base){
+void readFileIn(MOVIE* movieList, dafsaNode* base){
 
     FILE *fp;
     char str[901] = {0};
 
     /* opening file for reading */
-    fp = fopen("../otherdata.tsv", "r");
+    fp = fopen("../moviedata.tsv", "r");
     if (fp == NULL)
     {
         perror("Error opening file");
         return;
     }
-    dafsaNode dafsaBase = {
-            .letter = '\0',
-            .endOfWord = false,
-            .childNumber = 0,
-            .children = NULL
-    };
 
     int i = 0;
-    movieList = (MOVIE*)calloc(sizeof(MOVIE), 5689835);
-    fgets(str, 900, fp); // read past the first line of headers
+    //fgets(str, 900, fp); // read past the first line of headers
     while (fgets(str, 900, fp) != NULL) // read the rest of the lines
     {
+        //if(i > 66118)
+        //    break;
         char* value = strtok(str, "\t");
-        MOVIE *movie = &movieList[i++];
-        movie->id = i;
-
-        //strcpy(movie->tconst, value);
+        //MOVIE *movie = &movieList[i++];
 
         value = strtok(NULL, "\t");
-        //strcpy(movie->titleType, value);
 
 
         value = strtok(NULL, "\t");
-        //strcpy(movie->primaryTitle, value);
 
-        //insertTrieNode(base, value);
-        insertDAFSANode(&dafsaBase, value);
+
+        insertDAFSANode(base, value);
         //displayDAFSA(&dafsaBase, str, 0);
         /*for (int i = 0; i < dafsaBase.*//*children[0]->*//*childNumber; i++)
         {
@@ -55,24 +45,6 @@ void readFileIn(MOVIE* movieList, trieNode* base){
             displayDAFSA(dafsaBase.children[i], str, 0);
 
         }*/
-        //printf("\n");
-        //value = strtok(NULL, "\t");
-        //strcpy(movie->originalTitle, value);
-
-        //value = strtok(NULL, "\t");
-        //movie->isAdult = strcmp(value, "0") ? false : true;
-
-        //value = strtok(NULL, "\t");
-        //movie->startYear = (int) strtol(value, NULL, 10);
-
-        //value = strtok(NULL, "\t");
-        //movie->endYear, (strcmp(value, "/N") == 0) ? (int) strtol(value, NULL, 10) : 0;
-
-        //value = strtok(NULL, "\t");
-        //movie->runtimeMinutes, (strcmp(value, "/N") == 0) ? (int) strtol(value, NULL, 10) : 0;
-
-        //value = strtok(NULL, "\t");
-        //strcpy(movie->genres, value);
 
     }
     printf("%d", i);
