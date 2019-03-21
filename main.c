@@ -6,21 +6,37 @@
 #include "movie.h"
 #include "fileio.h"
 
-int test(int test1, int *test2)
+
+#include <sys/time.h>
+#include <sys/resource.h>
+
+double get_time()
 {
-    for (int i = 0; i < 10; i++)
-    {
-        *test2 = 6;
-        test1 += 50;
-    }
-    *test2 = 34;
-    return test1;
+    struct timeval t;
+    struct timezone tzp;
+    gettimeofday(&t, &tzp);
+    return t.tv_sec + t.tv_usec*1e-6;
 }
+
+int countNodes(trieNode *root)
+{
+    if (root->children == NULL)
+    {
+        return 1;
+    }
+    int number = 1;
+    for (int i = 0; i < root->childNumber; i++)
+    {
+        number += countNodes(root->children[i]);
+    }
+    return number;
+}
+
 int printed;
 
 int main()
 {
-    // Get the number of letters / words / lines in the data.tsv file
+    // Get the number of letters / words / lines in the movie.tsv file
     /*FILE *shell;
     char *command = "wc -l ../moviedata.tsv";
     static int WORD_COUNT = 0;
@@ -37,38 +53,42 @@ int main()
             .childNumber = 0,
             .children = NULL
     };
-
+    double startTime = get_time();
     readFileIn(movieList, &base);
+    double endTime = get_time();
+    printf("Building took: %lf\n", endTime - startTime);
+
+    startTime = get_time();
+    int nodes = countNodes(&base);
+    endTime = get_time();
+    printf("Counting took: %lf\n", endTime - startTime);
+
+    //printf("There are %d nodes\n", countNodes(&base));
 
     char str[409];
-    //displayTrie(&base, str, 0, -1);
 
 
-    //getchar();
-    //free(movieList);
     char userInput[409] = {0};
-    int i = 0;
-    char c;
+
+    printf("\n\nEnter Search: ");
     while (strcmp(userInput, "DONE") !=0)
     {
-        //scanf("%s", userInput);
         fgets(userInput, 400, stdin);
-        /*if (c== '<')
-            i--;
-        else
-            i++;
-        userInput[i] = c;*/
+
         int length = 0;
         printed = 0;
+        double startTime = get_time();
         trieNode* node = searchTrie(&base, userInput, &length);
-
-        displayTrie(node, str, 0, 20);
+        double endTime = get_time();
+        displayTrie(node, str, 20);
+        double finalTime = get_time();
+        printf("\n\nSearch took: %lf\n", endTime - startTime);
+        printf("Altogether took: %lf", finalTime - startTime);
         userInput[0] = '\0';
         printf("\n\nEnter Next Search: ");
     }
 
     exit(0);
-    return 0;
 }
 
 

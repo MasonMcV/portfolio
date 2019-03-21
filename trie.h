@@ -6,20 +6,22 @@
 #define PORTFOLIO_TRIE_H
 
 #include "mybool.h"
+#include "movie.h"
 
 typedef struct trieNode
 {
     char letter;
     bool endOfWord;
     int childNumber;
-    //MOVIE *data;
+    int movieNumber;
+    MOVIE **movie;
     struct trieNode **children;
 } trieNode;
 
 
-void insertTrieNode(struct trieNode *base, char *string);
+void insertTrieNode(struct trieNode *base, char *string, MOVIE *movie);
 
-void displayTrie(trieNode *root, char *str, int level, int number);
+void displayTrie(trieNode *root, char *str, int number);
 
 trieNode *searchTrie(trieNode *base, const char *string, int *depth);
 

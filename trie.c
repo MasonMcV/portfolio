@@ -34,7 +34,7 @@ trieNode *findPrefix(trieNode *base, const char *string, int *depth)
     return current;
 }
 
-trieNode *newTrieNode(char letter, bool endOfWord)
+trieNode *newTrieNode(char letter, bool endOfWord, MOVIE *movie)
 {
     trieNode *new = malloc(sizeof(trieNode));
     new->letter = letter;
@@ -43,52 +43,71 @@ trieNode *newTrieNode(char letter, bool endOfWord)
         new->endOfWord = true;
         new->childNumber = 0;
         new->children = NULL;
+        new->movieNumber = 1;
+        new->movie = calloc(sizeof(MOVIE *), 1);
+        new->movie[0] = movie;
     } else
     {
         new->endOfWord = false;
         new->childNumber = 1;
         new->children = malloc(sizeof(trieNode *));
+        new->movieNumber = 0;
+        new->movie = NULL;
     }
 
     return new;
 }
 
-trieNode *addSuffix(char *string)
+trieNode *addSuffix(char *string, MOVIE *movie)
 {
     if (string[0] == '\0')
         return NULL;
     bool isLast = (string[1] == '\0') ? true : false; // False iff string[1] is null (there are no more letters)
     char c = string[0];
 
-    trieNode *new = newTrieNode(c, isLast);
+    trieNode *new = newTrieNode(c, isLast, movie);
     if (!isLast)
     {
-        new->children[0] = addSuffix(string + 1);
+        new->children[0] = addSuffix(string + 1, movie);
         return new;
     }
 }
 
-void displayTrie(trieNode *root, char *str, int level, int number)
+void displayTrie(trieNode *root, char *str, int number)
 {
     if (number > 0 && printed >= number)
         return;
-    char letter = root->letter;
     if (root->endOfWord)
     {
-        str[level] = letter;
-        str[level + 1] = '\0';
-        puts(str + 1);
-        printed++;
-
+        for (int i = 0; i < root->movieNumber; i++)
+        {
+            MOVIE* movie = root->movie[i];
+            printf("%s, %d. %d, %s", movie->title, movie->year, movie->runtime, movie->genres);
+            //puts(root->movie[i]->title);
+            printed++;
+            if(number > 0 && printed >= number)
+                return;
+        }
     }
     for (int i = 0; i < root->childNumber; i++)
     {
-        str[level] = letter;
-        if (level == 0)
-            str[0] = ' ';
-        displayTrie(root->children[i], str, level + 1, number);
+        displayTrie(root->children[i], str, number);
     }
 }
+
+/*int countNodes(trieNode *root)
+{
+    if (root->children == NULL)
+    {
+        return 1;
+    }
+    int number = 0;
+    for (int i = 0; i < root->childNumber; i++)
+    {
+        number += countNodes(root->children[i]);
+    }
+    return number;
+}*/
 
 trieNode *searchTrie(trieNode *base, const char *string, int *depth)
 {
@@ -112,7 +131,7 @@ trieNode *searchTrie(trieNode *base, const char *string, int *depth)
     return current;
 }
 
-void insertTrieNode(trieNode *base, char *string)
+void insertTrieNode(trieNode *base, char *string, MOVIE *movie)
 {
     int prefixLength = 0;
     trieNode *prefix = findPrefix(base, string, &prefixLength);
@@ -120,16 +139,20 @@ void insertTrieNode(trieNode *base, char *string)
     if (prefixLength == strlen(string))
     {
         prefix->endOfWord = true;
+        prefix->movieNumber++;
+        prefix->movie = realloc(prefix->movie, sizeof(MOVIE *) * prefix->movieNumber);
+        prefix->movie[prefix->movieNumber - 1] = movie;
         return;
     }
 
     prefix->childNumber += 1; // Update number of children
 
     trieNode **newChildren = realloc(prefix->children,
-                                      sizeof(trieNode *) * prefix->childNumber); // Allocate space for the new one
+                                     sizeof(trieNode *) * prefix->childNumber); // Allocate space for the new one
 
     prefix->children = newChildren;
-    prefix->children[prefix->childNumber - 1] = addSuffix(string + prefixLength); // Add the rest of the nodes to it
+    prefix->children[prefix->childNumber - 1] = addSuffix(string + prefixLength,
+                                                          movie); // Add the rest of the nodes to it
 }
 
 
