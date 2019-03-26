@@ -38,8 +38,7 @@ void readFileIn(MOVIE** movieList, trieNode* base){
         char* title = strtok(NULL, "\t");         // title
         movie->title = calloc(sizeof(char), strlen(title)+1);
         strcpy(movie->title, title);
-        if(strcmp(title, "Men in Black") == 0)
-            printf("Found it:");
+        //if(strcmp(title, "Men in Black") == 0)
         strtok(NULL, "\t");         // originalTitle
         movie->isAdult = strcmp(strtok(NULL, "\t"), "0") ? false : true;         // isAdult
         movie->year = (int) strtol(strtok(NULL, "\t"), NULL, 10);         // year
@@ -52,6 +51,7 @@ void readFileIn(MOVIE** movieList, trieNode* base){
 
         char* value = movie->title;
 
+        //    printf("Found it:");
         insertTrieNode(base, value, movie);
         i++;
     }

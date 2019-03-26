@@ -44,7 +44,7 @@ int main()
 {
     // Get the number of letters / words / lines in the movie.tsv file
     FILE *shell;
-    char *command = "wc -l ../moviedata.tsv";
+    char *command = "wc -l ../wordsdata.tsv";
     static int WORD_COUNT = 0;
     shell = popen(command, "r");
     fscanf(shell, "%d", &WORD_COUNT);
@@ -75,7 +75,7 @@ int main()
 
     char str[409];
 
-    /*int ch;
+    int ch;
     char string[400] = {0};
 
     initscr();
@@ -136,7 +136,7 @@ int main()
     }
     endwin();//*/
 
-    char userInput[409] = {0};
+    /*char userInput[409] = {0};
 
     printf("\n\nEnter Search: ");
     while (strcmp(userInput, "DONE") !=0)
