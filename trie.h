@@ -29,6 +29,6 @@ void displayTrie(trieNode *root, char *str, int number);
 //void ncursesDisplayTrie(trieNode *root, void* win, int number);
 
 
-trieNode *searchTrie(trieNode *base, const char *string, int *depth);
+trieNode *findPrefix(trieNode *base, const char *string, int *depth);
 
 #endif //PORTFOLIO_TRIE_H

@@ -12,6 +12,13 @@
 
 int printed;
 
+char myLower(char c)
+{
+    if ((c >= 'A') && (c <= 'Z'))
+        c = (char) (c + 32);
+    return c;
+}
+
 trieNode *findPrefix(trieNode *base, const char *string, int *depth)
 {
     trieNode *current = base;
@@ -23,7 +30,7 @@ trieNode *findPrefix(trieNode *base, const char *string, int *depth)
 
     for (int i = 0; i < current->childNumber;)
     {
-        if (current->children[i]->letter != string[length])
+        if (current->children[i]->letter != myLower(string[length]))
         {
             i++;
             continue;
@@ -40,7 +47,12 @@ trieNode *findPrefix(trieNode *base, const char *string, int *depth)
 trieNode *newTrieNode(char letter, bool endOfWord, MOVIE *movie)
 {
     trieNode *new = malloc(sizeof(trieNode));
-    new->letter = letter;
+    int c;
+    if (isalpha(letter))
+        c = tolower(letter);
+    else
+        c = letter;
+    new->letter = myLower(letter);
     if (endOfWord)
     {
         new->endOfWord = true;
@@ -71,7 +83,7 @@ trieNode *addSuffix(char *string, MOVIE *movie)
     trieNode *new = newTrieNode(c, isLast, movie);
     if (!isLast)
     {
-        new->childrenLetters[0] = (char) (string + 1);
+        new->childrenLetters[0] = *(string + 1);
         new->children[0] = addSuffix(string + 1, movie);
         return new;
     }
@@ -123,7 +135,7 @@ trieNode *searchTrie(trieNode *base, const char *string, int *depth)
 
     for (int i = 0; i < current->childNumber; i++)
     {
-        if (current->children[i]->letter != string[length])
+        if (current->children[i]->letter != myLower(string[length]))
             continue;
         current = current->children[i];
         length++;
@@ -154,7 +166,7 @@ void insertTrieNode(trieNode *base, char *string, MOVIE *movie)
                                      sizeof(trieNode *) * prefix->childNumber); // Allocate space for the new one
 
     prefix->children = newChildren;
-    prefix->childrenLetters[prefix->childNumber - 1] = (char) (string + prefixLength);
+    prefix->childrenLetters[prefix->childNumber - 1] = *(string + prefixLength);
     prefix->children[prefix->childNumber - 1] = addSuffix(string + prefixLength,
                                                           movie); // Add the rest of the nodes to it
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "mybool.h"
 #include "movie.h"
@@ -9,8 +10,9 @@
 
 #include <sys/time.h>
 #include <sys/resource.h>
-#include <ncurses.h>
 #include <time.h>
+#include <ncurses.h>
+#include <ctype.h>
 
 double get_time()
 {
@@ -43,13 +45,13 @@ int printed;
 int main()
 {
     // Get the number of letters / words / lines in the movie.tsv file
-    FILE *shell;
+    /*FILE *shell;
     char *command = "wc -l ../wordsdata.tsv";
     static int WORD_COUNT = 0;
     shell = popen(command, "r");
     fscanf(shell, "%d", &WORD_COUNT);
     pclose(shell);
-    printf("%d Letters\n\n", WORD_COUNT);
+    printf("%d Letters\n\n", WORD_COUNT);*/
 
     srand(time(0));
 
@@ -71,7 +73,7 @@ int main()
     endTime = get_time();
     //printf("Counting took: %lf, There are %d nodes\n", endTime - startTime);
 
-    //printf("There are %d nodes\n", countNodes(&base));
+    printf("There are %d nodes\n", countNodes(&base));
 
     char str[409];
 
@@ -116,15 +118,26 @@ int main()
             i = 0;
         } else
         {
-            string[i++] = (char) ch;
+            if (strlen(string) < 400)
+                string[i++] = (char) ch;
         }
         wclear(win);
         attron(A_BOLD);
         printed = 0;
         int length;
-        trieNode *node = searchTrie(&base, string, &length);
-        mvprintw(25,25, "The char at the root is : %c", node->letter);
+        trieNode *node = findPrefix(&base, string, &length);
+        mvprintw(25, 25, "The char at the root is : %c", node->letter);
         //getTrieStrings(node, win, 20);
+        ncursesDisplayTrie(node, win, 20);
+
+        char newString[420] = "A ";
+        strcat(newString, string);
+        node = findPrefix(&base, newString, &length);
+        ncursesDisplayTrie(node, win, 20);
+
+        strcpy(newString, "The ");
+        strcat(newString, string);
+        node = findPrefix(&base, newString, &length);
         ncursesDisplayTrie(node, win, 20);
         //free(node);
         mvwprintw(win, 1, 1, "%s\n", string);
@@ -146,9 +159,9 @@ int main()
         int length = 0;
         printed = 0;
         double startTime = get_time();
-        trieNode* node = searchTrie(&base, userInput, &length);
+        trieNode* node = findPrefix(&base, userInput, &length);
         double endTime = get_time();
-        printf("%d", (int) node);
+        //printf("%d", (int) node);
         displayTrie(node, str, 20);
         double finalTime = get_time();
         printf("\n\nSearch took: %lf\n", endTime - startTime);
@@ -163,9 +176,6 @@ void ncursesDisplayTrie(trieNode *root, WINDOW *win, int number)
 {
     if (number > 0 && printed >= number)
         return;
-    if(root->childNumber > 0)
-        for (int i = 0; i < root->childNumber; i++)
-            ncursesDisplayTrie(root->children[i], win, number);
     if (root->endOfWord)
     {
         for (int i = 0; i < root->movieNumber; i++)
@@ -177,6 +187,9 @@ void ncursesDisplayTrie(trieNode *root, WINDOW *win, int number)
                 return;
         }
     }
+    //if(root->childNumber > 0)
+    for (int i = 0; i < root->childNumber; i++)
+        ncursesDisplayTrie(root->children[i], win, number);
     //for (int i = 0; i < root->childNumber; i++)
     //{
 
@@ -204,7 +217,7 @@ void getTrieStrings(trieNode *root, WINDOW *win, int number)
 
     while (resultNum < number)
     {
-        if(root->childNumber == 0)
+        if (root->childNumber == 0)
             continue;
         trieNode *base = root->children[rand() % root->childNumber];
         while (base != NULL)
@@ -221,7 +234,7 @@ void getTrieStrings(trieNode *root, WINDOW *win, int number)
                         return;
                 }
             }
-            if(base->childNumber == 0)
+            if (base->childNumber == 0)
                 continue;
             base = base->children[rand() % base->childNumber];
         }
