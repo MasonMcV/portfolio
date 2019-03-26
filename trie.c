@@ -68,6 +68,7 @@ trieNode *addSuffix(char *string, MOVIE *movie)
     trieNode *new = newTrieNode(c, isLast, movie);
     if (!isLast)
     {
+        new->childrenLetters[0] = (char)(string+1);
         new->children[0] = addSuffix(string + 1, movie);
         return new;
     }
@@ -81,11 +82,10 @@ void displayTrie(trieNode *root, char *str, int number)
     {
         for (int i = 0; i < root->movieNumber; i++)
         {
-            MOVIE* movie = root->movie[i];
+            MOVIE *movie = root->movie[i];
             printf("%s, %d. %d, %s", movie->title, movie->year, movie->runtime, movie->genres);
-            //puts(root->movie[i]->title);
             printed++;
-            if(number > 0 && printed >= number)
+            if (number > 0 && printed >= number)
                 return;
         }
     }
@@ -151,6 +151,7 @@ void insertTrieNode(trieNode *base, char *string, MOVIE *movie)
                                      sizeof(trieNode *) * prefix->childNumber); // Allocate space for the new one
 
     prefix->children = newChildren;
+    prefix->childrenLetters[prefix->childNumber - 1] = (char)(string+prefixLength);
     prefix->children[prefix->childNumber - 1] = addSuffix(string + prefixLength,
                                                           movie); // Add the rest of the nodes to it
 }

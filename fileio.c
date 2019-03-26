@@ -25,18 +25,21 @@ void readFileIn(MOVIE** movieList, trieNode* base){
     //fgets(str, 900, fp); // read past the first line of headers
     while (fgets(str, 900, fp) != NULL) // read the rest of the lines
     {
-        if(str[10] !='m')
+        strtok(str, "\t");          // tconst
+        if(strcmp(strtok(NULL, "\t"), "movie")!=0)         // titleType
+        {
             continue;
+        }
 
         MOVIE *movie = calloc(sizeof(MOVIE), 1);
 
         // Data is in the order
         // tconst	titleType	title	originalTitle	isAdult	year	endYear	runtime	genres
-        strtok(str, "\t");          // tconst
-        strtok(NULL, "\t");         // titleType
         char* title = strtok(NULL, "\t");         // title
         movie->title = calloc(sizeof(char), strlen(title)+1);
         strcpy(movie->title, title);
+        if(strcmp(title, "Men in Black") == 0)
+            printf("Found it:");
         strtok(NULL, "\t");         // originalTitle
         movie->isAdult = strcmp(strtok(NULL, "\t"), "0") ? false : true;         // isAdult
         movie->year = (int) strtol(strtok(NULL, "\t"), NULL, 10);         // year
@@ -50,6 +53,7 @@ void readFileIn(MOVIE** movieList, trieNode* base){
         char* value = movie->title;
 
         insertTrieNode(base, value, movie);
+        i++;
     }
     printf("%d", i);
     fclose(fp);

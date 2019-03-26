@@ -22,26 +22,33 @@ int main()
     int ch;
     char string[400] = {0};
 
-    /*printw("Please resize Window to full screen. \n\n");*/
-
     initscr();
-    printw("Press Any Key to Start");
-    refresh();
     raw();
     keypad(stdscr, TRUE);
     noecho();
     curs_set(0);
-    int n = getmaxx(stdscr);
-    //                   H   W   Y   X
-    WINDOW *win = newwin(22, n, 0, 0);
+    int x = getmaxx(stdscr);
+    int y = getmaxy(stdscr);
+    // Arg Order         H   W  Y  X
+    WINDOW *win = newwin(22, x, 0, 0);
     /*box(win, 0, 0);
     for (int j = 1; j < n - 1; j++)
         mvwaddch(win, 2, j, '-');*/
+    mvprintw(11, x/2-12, "Press Any Key to Start");
+    mvprintw(14, x/2-20, "At any time, press esc then 'q' to exit");
     wrefresh(win);
-    ch = getchar();
+    refresh();
+    getch();
+    for (int j = 0; j < x - 1; j++)
+        mvwaddch(win, 2, j, '-');
+    box(win, 0, 0);
+    wrefresh(win);
     int i = 0;
-    while (ch != 27)
+    while (true)
     {
+        ch = getch();
+        if (ch == 27)
+            break;
         if (ch == KEY_BACKSPACE)
         {
             if (strlen(string) > 0)
@@ -58,14 +65,11 @@ int main()
         wclear(win);
         attron(A_BOLD);
         mvwprintw(win, 1, 1, "%s\n", string);
-        for (int j = 0; j < n - 1; j++)
-            mvwaddch(win, 2, j, '-');
         attroff(A_BOLD);
+        for (int j = 0; j < x - 1; j++)
+            mvwaddch(win, 2, j, '-');
         box(win, 0, 0);
         wrefresh(win);
-        ch = getch();
-        if (ch == 27)
-            break;
     }
     endwin();
     return 0;
