@@ -13,7 +13,7 @@ void readFileIn(MOVIE** movieList, trieNode* base){
     FILE *fp;
     char str[901] = {0};
 
-    /* opening file for reading */
+    // opening file for reading
     fp = fopen("../data.tsv", "r");
     if (fp == NULL)
     {
@@ -22,7 +22,6 @@ void readFileIn(MOVIE** movieList, trieNode* base){
     }
 
     int i = 0;
-    //fgets(str, 900, fp); // read past the first line of headers
     while (fgets(str, 900, fp) != NULL) // read the rest of the lines
     {
         strtok(str, "\t");          // tconst
@@ -38,7 +37,6 @@ void readFileIn(MOVIE** movieList, trieNode* base){
         char* title = strtok(NULL, "\t");         // title
         movie->title = calloc(sizeof(char), strlen(title)+1);
         strcpy(movie->title, title);
-        //if(strcmp(title, "Men in Black") == 0)
         strtok(NULL, "\t");         // originalTitle
         movie->isAdult = strcmp(strtok(NULL, "\t"), "0") ? false : true;         // isAdult
         movie->year = (int) strtol(strtok(NULL, "\t"), NULL, 10);         // year
@@ -51,10 +49,8 @@ void readFileIn(MOVIE** movieList, trieNode* base){
 
         char* value = movie->title;
 
-        //    printf("Found it:");
         insertTrieNode(base, value, movie);
         i++;
     }
-    printf("%d", i);
     fclose(fp);
 }

@@ -110,41 +110,24 @@ void displayTrie(trieNode *root, char *str, int number)
     }
 }
 
-/*int countNodes(trieNode *root)
+void getMovieList(trieNode *root, int number, MOVIE **list)
 {
-    if (root->children == NULL)
+    if (number > 0 && printed >= number)
+        return;
+    if (root->endOfWord)
     {
-        return 1;
+        for (int i = 0; i < root->movieNumber; i++)
+        {
+            list[printed] = root->movie[i];
+            printed++;
+            if (number > 0 && printed >= number)
+                return;
+        }
     }
-    int number = 0;
     for (int i = 0; i < root->childNumber; i++)
-    {
-        number += countNodes(root->children[i]);
-    }
-    return number;
-}*/
-
-trieNode *searchTrie(trieNode *base, const char *string, int *depth)
-{
-    trieNode *current = base;
-    if (current->childNumber == 0)
-    {
-        return current;
-    }
-    int length = 0;
-
-    for (int i = 0; i < current->childNumber; i++)
-    {
-        if (current->children[i]->letter != myLower(string[length]))
-            continue;
-        current = current->children[i];
-        length++;
-        i = 0;
-    }
-
-    *depth = length;
-    return current;
+        getMovieList(root->children[i], number, list);
 }
+
 
 void insertTrieNode(trieNode *base, char *string, MOVIE *movie)
 {
@@ -170,6 +153,4 @@ void insertTrieNode(trieNode *base, char *string, MOVIE *movie)
     prefix->children[prefix->childNumber - 1] = addSuffix(string + prefixLength,
                                                           movie); // Add the rest of the nodes to it
 }
-
-
 
