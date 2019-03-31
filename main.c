@@ -45,6 +45,10 @@ typedef enum STATE
     JOURNAL
 } STATE;
 
+
+// All user input takes 400 charachters as an excessiev maximum
+// All file input takes 900 as there are multiple custom fields, and therefore an excessive maximum
+
 int main()
 {
     char fileName[400] = {0};
@@ -66,21 +70,35 @@ int main()
 
     readFileIn(&base);
 
+    // Set up all the variables used in the loop
     int ch;
-    char string[400] = {0};
+    char search[400] = {0};
+    char medium[400] = {0};
     char date[400] = {0};
 
-    int field = 1;
+    // Assign the date to today
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    strftime(date, 64, "%D", tm);
 
+    // Keep track of all the string lengths to print the cursor correctly
+    int searchLength = 0;
+    int mediumLength = 0;
+    int dateLength = (int) strlen(date);
+
+    // Control the input flow of the input node
+    bool edit = false;
+    int inputField = 0;
+
+
+    // Data related to the movie list that is displayed
     MOVIE *movieToAdd = NULL;
-
     MOVIE **list = calloc(sizeof(MOVIE *), 20);
-
     int selected = 0;
     int entries = 0;
 
     STATE state = SEARCH;
-    newScreen();
+    newScreen(); // Display the initial screen and prep all the ncurses stuff
     int i = 0;
     while (true)
     {
@@ -93,37 +111,34 @@ int main()
             case SEARCH:
                 switch (ch) // Handle different input for the SEARCH tab
                 {
-                    case 9: // TAB
+                    case 9: // TAB - Go to the JOURNAL
                         newJournal(fileName, 0);
                         state = JOURNAL;
                         break;
-                    case 10: // ENTER
+                    case 10: // ENTER - Add the current MOVIE - INPUT
                         if (list[0] == NULL)
                             continue;
                         movieToAdd = list[selected];
-                        for (int j = 0; j < i; j++)
-                            string[j] = '\0';
-                        i = 0;
                         selected = 0;
-                        printInputText(" ", " ");
+                        printInputText(" ", " ", 0);
                         state = INPUT;
                         break;
                     default: // Characters that change display
-                        if (ch == 7)
+                        if (ch == 7) // Backspace
                         {
-                            if (strlen(string) > 0)
-                                string[--i] = '\0';
+                            if (strlen(search) > 0) // Go back if not already at the beginning
+                                search[--searchLength] = '\0';
                         } else if (ch == 2) // DOWN ARROW
-                            selected = (selected + 1) % 20;
+                            selected = (selected + 1) % 20; // increment
                         else if (ch == 3) // UP ARROW
-                            selected = (selected + 19) % 20;
-                        else if (strlen(string) < 400)
-                            string[i++] = (char) ch;
+                            selected = (selected + 19) % 20; // decrement
+                        else if (strlen(search) < 400) // Add if not too long already
+                            search[searchLength++] = (char) ch;
                         printed = 0;
                         int length;
-                        trieNode *node = findPrefix(&base, string, &length);
+                        trieNode *node = findPrefix(&base, search, &length);
                         getMovieList(node, 20, list);
-                        newSearch(string, list, 20, selected);
+                        newSearch(search, list, 20, selected);
                         break;
                 }
                 break;
@@ -131,7 +146,13 @@ int main()
                 switch (ch) // Handle input for the INPUT tab
                 {
                     case 10: // ENTER
-                        addToUserFile(fileName, movieToAdd, string, date);
+                        if (edit)
+                        {
+                            updateRecord(fileName, selected, medium, date);
+                            edit = false;
+                        }
+                        else
+                            addToUserFile(fileName, movieToAdd, medium, date);
                         entries = newJournal(fileName, 1);
                         state = JOURNAL;
                         break;
@@ -140,31 +161,63 @@ int main()
                         state = SEARCH;
                         break;
                     case 9: // TAB
-                        field = !field;
-                        i = (int) strlen(field ? string : date);
+                        inputField = !inputField;
+                        printInputText(medium, date, inputField);
                         break;
                     default:
-                        if (ch == 7) // BACKSPACE
+                        if (inputField == 0)
                         {
-                            if (i > 0)
-                                (field ? string : date)[--i] = '\0';
-                        } else if (i < 400)
-                            (field ? string : date)[i++] = (char) ch;
-                        printInputText(string, date);
+                            if (ch == 7) // BACKSPACE
+                            {
+                                if (mediumLength > 0)// Go back if not already at the beginning
+                                    medium[--mediumLength] = '\0';
+                            } else if (mediumLength < 400) // Add if not too long already
+                                medium[mediumLength++] = (char) ch;
+
+                        } else if (inputField == 1)
+                        {
+                            if (ch == 7) // BACKSPACE
+                            {
+                                if (dateLength > 0) // Go back if not already at the beginning
+                                    date[--dateLength] = '\0';
+                            } else if (dateLength < 400) // Add if not too long already
+                                date[dateLength++] = (char) ch;
+                        }
+                        printInputText(medium, date, inputField);
                         break;
                 }
                 break;
             case JOURNAL: // Handle input for the JOURNAL tab
 
                 if (ch == 9) // TAB
-                {
+                { // Show the search and then go to it
                     showSearch();
                     selected = 0;
+                    for (int j = 0; j < searchLength; j++) // Set search to all nulls
+                        search[j] = '\0';
+                    searchLength = 0; // Reset the search
                     state = SEARCH;
                     break;
                 }
-                if (entries > 0)
+                if (ch == 74) // DELETE
                 {
+                    deleteRecord(fileName, selected);
+                }
+                if (ch == 10) // ENTER
+                { // Set the edit flag to true nad let the INPUT dialog take care of it
+                    edit = true;
+                    printInputText(" ", " ", 0);
+                    for (int j = 0; j < mediumLength; j++) // Set search to all nulls
+                        medium[j] = '\0';
+                    mediumLength = 0;
+                    for (int j = 0; j < dateLength; j++) // Set search to all nulls
+                        date[j] = '\0';
+                    dateLength = 0;
+                    state = INPUT;
+                    break;
+                }
+                if (entries > 0)
+                { // Cycle through the entries
                     if (ch == 2) // DOWN ARROW
                         selected = (selected + 1) % (entries + 1);
                     else if (ch == 3) // UP ARROW

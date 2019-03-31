@@ -24,4 +24,10 @@ void addToUserFile(char *name, MOVIE *movie, char *medium, char *date);
 
 int getFileWords(char *name, void (*callback)(char *, int));
 
+void deleteRecord(char *name, int number);
+
+void updateRecord(char *name, int number, char *medium, char *date);
+
+
+
 #endif //PORTFOLIO_FILEIO_H

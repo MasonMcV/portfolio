@@ -19,6 +19,7 @@ char myLower(char c)
     return c;
 }
 
+// Go through all of the nodes till a null is found or the end of the string is found
 trieNode *findPrefix(trieNode *base, const char *string, int *depth)
 {
     trieNode *current = base;
@@ -44,6 +45,7 @@ trieNode *findPrefix(trieNode *base, const char *string, int *depth)
     return current;
 }
 
+// Add a new node with memory allocated based on position in the word.
 trieNode *newTrieNode(char letter, bool endOfWord, MOVIE *movie)
 {
     trieNode *new = malloc(sizeof(trieNode));
@@ -73,6 +75,7 @@ trieNode *newTrieNode(char letter, bool endOfWord, MOVIE *movie)
     return new;
 }
 
+// Add child nodes in position 0 till the end of the word.
 trieNode *addSuffix(char *string, MOVIE *movie)
 {
     if (string[0] == '\0')
@@ -88,6 +91,7 @@ trieNode *addSuffix(char *string, MOVIE *movie)
     }
 }
 
+// Display number or less end of word nodes descending from the current node
 void displayTrie(trieNode *root, char *str, int number)
 {
     if (number > 0 && printed >= number)
@@ -109,6 +113,7 @@ void displayTrie(trieNode *root, char *str, int number)
     }
 }
 
+// Same as displayTrie, but pust is in list to be printed with ncurses
 void getMovieList(trieNode *root, int number, MOVIE **list)
 {
     if (number > 0 && printed >= number)
@@ -127,13 +132,13 @@ void getMovieList(trieNode *root, int number, MOVIE **list)
         getMovieList(root->children[i], number, list);
 }
 
-
+// Handles the main logic of adding a record to the trie
 void insertTrieNode(trieNode *base, char *string, MOVIE *movie)
 {
     int prefixLength = 0;
     trieNode *prefix = findPrefix(base, string, &prefixLength);
 
-    if (prefixLength == strlen(string))
+    if (prefixLength == strlen(string)) // the record is already in the trie - add a new record in movie list
     {
         prefix->endOfWord = true;
         prefix->movieNumber++;

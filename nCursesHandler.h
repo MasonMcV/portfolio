@@ -17,11 +17,9 @@ void showSearch();
 
 void printMovies(MOVIE **movieData, int number, int selected);
 
-void showInputDialog();
-
 int newJournal(char *name, int numSelected);
 
-void printInputText(char* meduim, char* date);
+void printInputText(char *medium, char *date, int field);
 
 void endCurses();
 
