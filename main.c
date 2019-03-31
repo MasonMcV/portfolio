@@ -120,7 +120,7 @@ int main()
                             continue;
                         movieToAdd = list[selected];
                         selected = 0;
-                        printInputText(" ", " ", 0);
+                        printInputText(medium, date, 0);
                         state = INPUT;
                         break;
                     default: // Characters that change display
@@ -206,7 +206,7 @@ int main()
                 if (ch == 10) // ENTER
                 { // Set the edit flag to true nad let the INPUT dialog take care of it
                     edit = true;
-                    printInputText(" ", " ", 0);
+                    printInputText(medium, date, 0);
                     for (int j = 0; j < mediumLength; j++) // Set search to all nulls
                         medium[j] = '\0';
                     mediumLength = 0;
