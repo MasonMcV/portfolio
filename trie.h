@@ -16,7 +16,6 @@ typedef struct trieNode
     bool endOfWord;
     int childNumber;
     int movieNumber;
-    char childrenLetters[100];
     MOVIE **movie;
     struct trieNode **children;
 } trieNode;

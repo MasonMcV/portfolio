@@ -14,9 +14,57 @@
 #include <ncurses.h>
 #include <ctype.h>
 
-#include "movie.h"
-#include "fileio.h"
+//#include "movie.h"
+//#include "fileio.h"
 
+typedef struct logEntry
+{
+    char *title;
+    int year;
+    int runtime;
+    char *genres;
+    char *medium;
+    int datePurchared;
+} logEntry;
+
+
+int main()
+{
+    printf("%d", (uint8_t)(-1)% 20);
+    /*logEntry **log;
+    char name[400];
+    scanf("%s", name);
+
+    FILE *fp;
+    strcat(name, ".log");
+
+    fp = fopen(name, "r");
+    if (fp == NULL)
+    {
+        printf("File not found, Creating new");
+        fp = fopen(name, "w");
+        fprintf(fp, "HELLO");
+    } else
+    {
+        log = calloc(sizeof(logEntry *), 1);
+
+        char txt[901] = {0};
+        int i = 0;
+        while (fgets(txt, 900, fp) != NULL) // read the rest of the lines
+        {
+            logEntry *entry = calloc(sizeof(logEntry), 1);
+            entry->title = strtok(txt, "\t");
+            entry->year = (int) strtol(strtok(NULL, "\t"), NULL, 10);
+            entry->runtime = (int) strtol(strtok(NULL, "\t"), NULL, 10);
+            entry->genres = strtok(NULL, "\t");
+            entry->medium = strtok(NULL, "\t");
+            entry->datePurchared = (int) strtol(strtok(NULL, "\t"), NULL, 10);
+            log[i] = entry;
+        }
+    }*/
+
+}
+/*
 int main()
 {
     int ch;
@@ -31,9 +79,11 @@ int main()
     int y = getmaxy(stdscr);
     // Arg Order         H   W  Y  X
     WINDOW *win = newwin(22, x, 0, 0);
-    /*box(win, 0, 0);
+    */
+/*box(win, 0, 0);
     for (int j = 1; j < n - 1; j++)
-        mvwaddch(win, 2, j, '-');*/
+        mvwaddch(win, 2, j, '-');*//*
+
     mvprintw(11, x/2-12, "Press Any Key to Start");
     mvprintw(14, x/2-20, "At any time, press esc then 'q' to exit");
     wrefresh(win);
@@ -73,4 +123,4 @@ int main()
     }
     endwin();
     return 0;
-}
+}*/

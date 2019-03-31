@@ -11,9 +11,17 @@ void newScreen();
 
 char handleInput();
 
-void newSearch(char *string, MOVIE **movieData, int number);
+void newSearch(char *string, MOVIE **movieData, int number, int selected);
 
-void printMovies(MOVIE **movieData, int number);
+void showSearch();
+
+void printMovies(MOVIE **movieData, int number, int selected);
+
+void showInputDialog();
+
+int newJournal(char *name, int numSelected);
+
+void printInputText(char* meduim, char* date);
 
 void endCurses();
 
