@@ -15,6 +15,9 @@ cmake ..
 make
 ./iMovieSearch
 ```
+## Video Demonstration
+https://youtu.be/oQWN92FhrHY
+
 ## Using iMovieSearch
 * Enter name when prompted
     * This will be the name of the file
