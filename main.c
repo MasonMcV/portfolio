@@ -121,6 +121,7 @@ int main()
                         movieToAdd = list[selected];
                         selected = 0;
                         printInputText(medium, date, 0);
+                        inputField = 0;
                         state = INPUT;
                         break;
                     default: // Characters that change display
