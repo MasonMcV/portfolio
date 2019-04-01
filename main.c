@@ -211,6 +211,7 @@ int main()
                     for (int j = 0; j < dateLength; j++) // Set search to all nulls
                         date[j] = '\0';
                     dateLength = 0;
+                    inputField = 0;
                     state = INPUT;
                     break;
                 }
@@ -226,6 +227,10 @@ int main()
         }
     }
     endCurses();
+
+    freeTrie(&base);
+
+    getchar();
 
     exit(0);
 }

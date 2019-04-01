@@ -126,7 +126,7 @@ int newJournal(char *name, int numSelected)
 {
     wclear(journal);
     selected = numSelected;
-    drawBox(journal, "Journal");
+    drawBox(journal, "Journal: Enter to edit, Delete to remove");
     int numEntries = getFileWords(name, journalCallback);
     wmove(journal, numSelected + 1, 1);
     wrefresh(journal);

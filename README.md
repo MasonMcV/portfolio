@@ -5,7 +5,7 @@
 ## Getting Started
 1. Clone the repository: `git clone https://github.com/MasonMcV/portfolio.git`
 
-1. Download the data file: `wget https://datasets.imdbws.com/title.basics.tsv.gz`
+1. Download the data file: `wget https://datasets.imdbws.com/title.basics.tsv.gz && gunzip title.basics.tsv.gz`
 
 1. Make the project
 ```

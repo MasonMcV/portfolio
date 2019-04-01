@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <time.h>
+#include "nCursesHandler.h"
 
 #include "fileio.h"
 
@@ -21,7 +22,7 @@ void readFileIn(trieNode *base)
     char str[901] = {0};
 
     // opening file for reading
-    fp = fopen("../data.tsv", "r");
+    fp = fopen("../title.basics.tsv", "r");
     if (fp == NULL)
     {
         perror("Error opening data file");
@@ -72,6 +73,7 @@ void addToUserFile(char *name, MOVIE *movie, char *medium, char *date)
     if (fp == NULL)
     {
         printf("SOMETHING WENT WRONG OPENING USER FILE");
+        endCurses();
         exit(0);
     }
     if (date[0] == '\0')
@@ -117,6 +119,7 @@ void deleteRecord(char *name, int number)
     if (fp == NULL)
     {
         printf("SOMETHING WENT WRONG OPENING USER FILE");
+        endCurses();
         exit(0);
     }
     char recordList[900][900];
@@ -136,6 +139,7 @@ void deleteRecord(char *name, int number)
     if (fp == NULL)
     {
         printf("SOMETHING WENT WRONG OPENING USER FILE");
+        endCurses();
         exit(0);
     }
     for (int k = 0; k < j; k++)
@@ -156,6 +160,8 @@ void updateRecord(char *name, int number, char *medium, char *date)
     if (fp == NULL)
     {
         printf("SOMETHING WENT WRONG OPENING USER FILE");
+        endCurses();
+        endCurses();
         exit(0);
     }
     char recordList[900][900];
@@ -187,6 +193,7 @@ void updateRecord(char *name, int number, char *medium, char *date)
     if (fp == NULL)
     {
         printf("SOMETHING WENT WRONG OPENING USER FILE");
+        endCurses();
         exit(0);
     }
     for (int k = 0; k < i; k++)

@@ -24,6 +24,8 @@ void insertTrieNode(struct trieNode *base, char *string, MOVIE *movie);
 
 void displayTrie(trieNode *root, char *str, int number);
 
+void freeTrie(trieNode *root);
+
 void getMovieList(trieNode *root, int number, MOVIE **list);
 
 trieNode *findPrefix(trieNode *base, const char *string, int *depth);

@@ -112,6 +112,23 @@ void displayTrie(trieNode *root, char *str, int number)
     }
 }
 
+void freeTrie(trieNode *root)
+{
+    if (root == NULL)
+        return;
+    for (int i = 0; i < root->movieNumber; i++)
+    {
+        free(root->movie[i]->title);
+        free(root->movie[i]->genres);
+        free(root->movie[i]);
+    }
+    for (int i = 0; i < root->childNumber; i++)
+    {
+        freeTrie(root->children[i]);
+    }
+    //free(root);
+}
+
 // Same as displayTrie, but pust is in list to be printed with ncurses
 void getMovieList(trieNode *root, int number, MOVIE **list)
 {
