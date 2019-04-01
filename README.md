@@ -35,6 +35,7 @@ make
 * At any time press ESC to exit the program
 
 Inspiration found at:
+
 [http://aclweb.org/anthology/J00-1002][http://aclweb.org/anthology/J00-1002]
 [https://www.geeksforgeeks.org/trie-insert-and-search/][https://www.geeksforgeeks.org/trie-insert-and-search/]
 [https://en.wikipedia.org/wiki/Trie][https://en.wikipedia.org/wiki/Trie]
