@@ -2,7 +2,7 @@
 ## iMovieSearch
 ### Mason Mcvicker
 
-##Getting Started
+## Getting Started
 1. Clone the repository: `git clone https://github.com/MasonMcV/portfolio.git`
 
 1. Download the data file: `wget https://datasets.imdbws.com/title.basics.tsv.gz`
@@ -32,4 +32,4 @@ make
     * Enter to edit the Medium and Date
     * Delete to remove the Movie
     * Tab to go back to search and add more movies
-*At any time press ESC to exit the program
+* At any time press ESC to exit the program

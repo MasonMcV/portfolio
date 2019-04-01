@@ -8,7 +8,6 @@
 
 #include "mybool.h"
 #include "trie.h"
-#include "lettermap.h"
 
 int printed;
 

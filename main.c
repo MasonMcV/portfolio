@@ -150,8 +150,7 @@ int main()
                         {
                             updateRecord(fileName, selected, medium, date);
                             edit = false;
-                        }
-                        else
+                        } else
                             addToUserFile(fileName, movieToAdd, medium, date);
                         entries = newJournal(fileName, 1);
                         state = JOURNAL;
@@ -188,7 +187,6 @@ int main()
                 }
                 break;
             case JOURNAL: // Handle input for the JOURNAL tab
-
                 if (ch == 9) // TAB
                 { // Show the search and then go to it
                     showSearch();
